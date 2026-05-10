@@ -5,31 +5,11 @@
 (function () {
     'use strict';
 
-    const DATA_URL = 'data/funds.json';
-
-    const state = {
-        funds: [],
-        category: 'all',
-        search: '',
-        sortKey: null,
-        sortDir: 'desc',
-    };
-
-    const elements = {
-        updatedAt: document.getElementById('updated-at'),
-        totalFunds: document.getElementById('total-funds'),
-        searchInput: document.getElementById('search-input'),
-        categoryChips: document.getElementById('category-chips'),
-        tbody: document.getElementById('funds-tbody'),
-        resultsCount: document.getElementById('results-count'),
-        table: document.getElementById('funds-table'),
-    };
-
-    /* ---------- Number parsing & formatting ---------- */
+    /* ---------- Helpers ---------- */
 
     function parseNumeric(value) {
         if (value === null || value === undefined || value === '') return null;
-        const cleaned = String(value).replace(/[%,]/g, '').trim();
+        const cleaned = String(value).replace(/[%,+]/g, '').trim();
         const num = parseFloat(cleaned);
         return isNaN(num) ? null : num;
     }
@@ -46,7 +26,6 @@
         else if (num < -0.001) cls = 'return-neg';
 
         const sign = num > 0 ? '+' : '';
-        // bdi forces LTR display so "-0.06%" doesn't render as "%-0.06"
         return `<span class="${cls}"><bdi>${sign}${num.toFixed(2)}%</bdi></span>`;
     }
 
@@ -60,140 +39,125 @@
         });
     }
 
-    /* ---------- Data loading ---------- */
+    function formatBigMetric(value) {
+        if (!value) return '—';
+        const num = parseNumeric(value);
+        if (num === null) return value;
+        const sign = num > 0 ? '+' : '';
+        const cls = num > 0 ? 'return-pos' : (num < 0 ? 'return-neg' : 'return-zero');
+        return `<span class="${cls}" style="padding: 2px 8px; border-radius: 3px;">${sign}${num.toFixed(2)}%</span>`;
+    }
 
-    async function loadData() {
+    function escapeHtml(s) {
+        if (s === null || s === undefined) return '';
+        return String(s)
+            .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+    }
+
+    /* ==========================================================
+       VIEW 1: TTF Funds (Tachlit)
+       ========================================================== */
+
+    const ttfState = {
+        funds: [],
+        category: 'all',
+        search: '',
+        sortKey: null,
+        sortDir: 'desc',
+    };
+
+    const ttfElements = {
+        total: document.getElementById('ttf-total'),
+        searchInput: document.getElementById('ttf-search'),
+        categoryChips: document.getElementById('ttf-categories'),
+        tbody: document.getElementById('ttf-tbody'),
+        count: document.getElementById('ttf-count'),
+        table: document.getElementById('ttf-table'),
+    };
+
+    async function loadTTF() {
         try {
-            const response = await fetch(DATA_URL + '?_=' + Date.now());
-            if (!response.ok) throw new Error('HTTP ' + response.status);
-            const payload = await response.json();
-
-            state.funds = payload.funds || [];
-            elements.updatedAt.textContent = payload.updated_at_display || '—';
-            elements.totalFunds.textContent = `${payload.found || 0} / ${payload.total_funds || state.funds.length}`;
-
-            renderCategoryChips();
-            renderTable();
+            const r = await fetch('data/funds.json?_=' + Date.now());
+            if (!r.ok) throw new Error('HTTP ' + r.status);
+            const payload = await r.json();
+            ttfState.funds = payload.funds || [];
+            ttfElements.total.textContent = `${payload.found || 0} / ${payload.total_funds || ttfState.funds.length}`;
+            updateMastheadDate(payload.updated_at_display);
+            renderTTFCategories();
+            renderTTFTable();
         } catch (err) {
-            console.error('Failed to load data:', err);
-            elements.tbody.innerHTML = `
-                <tr>
-                    <td colspan="14" class="loading">
-                        שגיאה בטעינת הנתונים. נסה לרענן את הדף.
-                        <br><small style="color:#999;">${err.message}</small>
-                    </td>
-                </tr>`;
+            console.error('TTF load failed:', err);
+            ttfElements.tbody.innerHTML = `<tr><td colspan="14" class="loading">שגיאה בטעינת נתוני קרנות תכלית.<br><small>${err.message}</small></td></tr>`;
         }
     }
 
-    /* ---------- Category chips ---------- */
-
-    function renderCategoryChips() {
-        const counts = { all: state.funds.length };
-        for (const f of state.funds) {
-            counts[f.category] = (counts[f.category] || 0) + 1;
-        }
+    function renderTTFCategories() {
+        const counts = { all: ttfState.funds.length };
+        for (const f of ttfState.funds) counts[f.category] = (counts[f.category] || 0) + 1;
 
         const order = [
-            'all',
-            'מניות בארץ',
-            'חו"ל חשופי מטבע',
-            'חו"ל מנוטרלי מטבע',
-            'משולבות',
-            'אג"ח ממשלתי',
-            'אג"ח קונצרני',
-            'אינדקס אג"ח חברות',
+            'all', 'מניות בארץ', 'חו"ל חשופי מטבע', 'חו"ל מנוטרלי מטבע',
+            'משולבות', 'אג"ח ממשלתי', 'אג"ח קונצרני', 'אינדקס אג"ח חברות',
         ];
 
-        const chips = order
-            .filter(cat => counts[cat] !== undefined)
-            .map(cat => {
-                const label = cat === 'all' ? 'הכל' : cat;
-                const isActive = state.category === cat;
-                return `<button class="chip ${isActive ? 'active' : ''}" data-category="${escapeHtml(cat)}">
-                    ${escapeHtml(label)}
-                    <span class="chip__count">${counts[cat]}</span>
-                </button>`;
-            })
-            .join('');
+        ttfElements.categoryChips.innerHTML = order
+            .filter(c => counts[c] !== undefined)
+            .map(c => {
+                const label = c === 'all' ? 'הכל' : c;
+                const active = ttfState.category === c ? 'active' : '';
+                return `<button class="chip ${active}" data-category="${escapeHtml(c)}">${escapeHtml(label)}<span class="chip__count">${counts[c]}</span></button>`;
+            }).join('');
 
-        elements.categoryChips.innerHTML = chips;
-        elements.categoryChips.querySelectorAll('.chip').forEach(chip => {
+        ttfElements.categoryChips.querySelectorAll('.chip').forEach(chip => {
             chip.addEventListener('click', () => {
-                state.category = chip.dataset.category;
-                renderCategoryChips();
-                renderTable();
+                ttfState.category = chip.dataset.category;
+                renderTTFCategories();
+                renderTTFTable();
             });
         });
     }
 
-    /* ---------- Filtering & sorting ---------- */
-
-    function getFilteredFunds() {
-        let funds = state.funds;
-
-        if (state.category !== 'all') {
-            funds = funds.filter(f => f.category === state.category);
+    function getTTFFiltered() {
+        let funds = ttfState.funds;
+        if (ttfState.category !== 'all') funds = funds.filter(f => f.category === ttfState.category);
+        if (ttfState.search) {
+            const q = ttfState.search.toLowerCase();
+            funds = funds.filter(f => (f.name || '').toLowerCase().includes(q) || (f.fund_id || '').includes(q));
         }
-
-        if (state.search) {
-            const q = state.search.toLowerCase();
-            funds = funds.filter(f =>
-                (f.name || '').toLowerCase().includes(q) ||
-                (f.fund_id || '').includes(q)
-            );
+        if (ttfState.sortKey) {
+            funds = sortFunds(funds, ttfState.sortKey, ttfState.sortDir);
         }
-
-        if (state.sortKey) {
-            const key = state.sortKey;
-            const dir = state.sortDir === 'asc' ? 1 : -1;
-            funds = [...funds].sort((a, b) => {
-                const aRaw = a[key];
-                const bRaw = b[key];
-                const aNum = parseNumeric(aRaw);
-                const bNum = parseNumeric(bRaw);
-
-                // Numeric comparison if both are numeric
-                if (aNum !== null && bNum !== null) {
-                    return (aNum - bNum) * dir;
-                }
-                // Nulls go to the bottom regardless of direction
-                if (aNum === null && bNum !== null) return 1;
-                if (aNum !== null && bNum === null) return -1;
-                // String comparison
-                const aStr = String(aRaw || '');
-                const bStr = String(bRaw || '');
-                return aStr.localeCompare(bStr, 'he') * dir;
-            });
-        }
-
         return funds;
     }
 
-    /* ---------- Table rendering ---------- */
+    function sortFunds(funds, key, dir) {
+        const mult = dir === 'asc' ? 1 : -1;
+        return [...funds].sort((a, b) => {
+            const aN = parseNumeric(a[key]);
+            const bN = parseNumeric(b[key]);
+            if (aN !== null && bN !== null) return (aN - bN) * mult;
+            if (aN === null && bN !== null) return 1;
+            if (aN !== null && bN === null) return -1;
+            return String(a[key] || '').localeCompare(String(b[key] || ''), 'he') * mult;
+        });
+    }
 
-    function renderTable() {
-        const funds = getFilteredFunds();
-
+    function renderTTFTable() {
+        const funds = getTTFFiltered();
         if (funds.length === 0) {
-            elements.tbody.innerHTML = `
-                <tr><td colspan="14" class="loading">לא נמצאו קרנות התואמות את החיפוש</td></tr>`;
-            elements.resultsCount.textContent = '0 קרנות';
+            ttfElements.tbody.innerHTML = `<tr><td colspan="14" class="loading">לא נמצאו קרנות התואמות את החיפוש</td></tr>`;
+            ttfElements.count.textContent = '0 קרנות';
             return;
         }
 
-        const rows = funds.map((f, i) => {
-            const isNotFound = f.status === 'not_found';
-            const trClass = isNotFound ? 'not-found' : '';
-
+        ttfElements.tbody.innerHTML = funds.map((f, i) => {
+            const nf = f.status === 'not_found';
             return `
-                <tr class="${trClass}" style="--row-index: ${i}">
-                    <td class="col-name">
-                        ${escapeHtml(f.name)}
-                        <span class="fund-category">${escapeHtml(f.category)}</span>
-                    </td>
+                <tr class="${nf ? 'not-found' : ''}" style="--row-index: ${i}">
+                    <td class="col-name">${escapeHtml(f.name)}<span class="fund-category">${escapeHtml(f.category)}</span></td>
                     <td class="col-id">${escapeHtml(f.fund_id)}</td>
-                    <td class="col-num">${isNotFound ? '<span class="empty-cell">—</span>' : formatPrice(f.price)}</td>
+                    <td class="col-num">${nf ? '<span class="empty-cell">—</span>' : formatPrice(f.price)}</td>
                     <td class="col-num">${formatReturn(f.daily)}</td>
                     <td class="col-num">${formatReturn(f.weekly)}</td>
                     <td class="col-num">${formatReturn(f.month_to_date)}</td>
@@ -205,18 +169,190 @@
                     <td class="col-num">${formatReturn(f.y2025)}</td>
                     <td class="col-num">${formatReturn(f.y2024)}</td>
                     <td class="col-num">${formatReturn(f.y2023)}</td>
-                </tr>
-            `;
+                </tr>`;
         }).join('');
 
-        elements.tbody.innerHTML = rows;
-        elements.resultsCount.textContent = `מציג ${funds.length} מתוך ${state.funds.length} קרנות`;
-
-        updateSortIndicators();
+        ttfElements.count.textContent = `מציג ${funds.length} מתוך ${ttfState.funds.length} קרנות`;
+        updateSortIndicators(ttfElements.table, ttfState);
     }
 
-    function updateSortIndicators() {
-        elements.table.querySelectorAll('th').forEach(th => {
+    /* ==========================================================
+       VIEW 2: Global indices + 13F spotlight
+       ========================================================== */
+
+    const globalState = {
+        indices: [],
+        sortKey: null,
+        sortDir: 'desc',
+    };
+
+    const globalElements = {
+        spotlightMetrics: document.getElementById('spotlight-metrics'),
+        riskThead: document.getElementById('risk-thead'),
+        riskTbody: document.getElementById('risk-tbody'),
+        holdingsTbody: document.getElementById('holdings-tbody'),
+        holdingsMeta: document.getElementById('holdings-meta'),
+        globalTbody: document.getElementById('global-tbody'),
+        globalTable: document.getElementById('global-table'),
+    };
+
+    async function loadGlobal() {
+        // Load Indxx 13F
+        try {
+            const r = await fetch('data/indxx_13f.json?_=' + Date.now());
+            if (r.ok) {
+                const payload = await r.json();
+                renderSpotlight(payload);
+            } else {
+                renderSpotlightError('לא הצלחנו לטעון נתוני 13F');
+            }
+        } catch (err) {
+            console.error('Indxx load failed:', err);
+            renderSpotlightError(err.message);
+        }
+
+        // Load global indices
+        try {
+            const r = await fetch('data/global_indices.json?_=' + Date.now());
+            if (r.ok) {
+                const payload = await r.json();
+                globalState.indices = payload.indices || [];
+                renderGlobalTable();
+            } else {
+                globalElements.globalTbody.innerHTML = `<tr><td colspan="12" class="loading">שגיאה בטעינת מדדים גלובליים</td></tr>`;
+            }
+        } catch (err) {
+            console.error('Global load failed:', err);
+            globalElements.globalTbody.innerHTML = `<tr><td colspan="12" class="loading">שגיאה: ${err.message}</td></tr>`;
+        }
+    }
+
+    function renderSpotlight(payload) {
+        if (payload.status === 'error') {
+            renderSpotlightError(payload.error || 'שגיאה לא ידועה');
+            return;
+        }
+
+        const summary = payload.returns_summary || {};
+
+        // Metric cards
+        const metrics = [
+            { label: 'YTD',         key: 'ytd' },
+            { label: '1 Year',      key: '1y' },
+            { label: '3 Years (annualized)', key: '3y' },
+            { label: 'Since Base',  key: 'since_base' },
+        ];
+
+        globalElements.spotlightMetrics.innerHTML = metrics.map(m => `
+            <div class="metric-card">
+                <div class="metric-card__label">${m.label}</div>
+                <div class="metric-card__value">${formatBigMetric(summary[m.key])}</div>
+            </div>`).join('');
+
+        // Risk & Return table
+        const rt = payload.returns_table;
+        if (rt) {
+            globalElements.riskThead.innerHTML = rt.headers.map(h => `<th>${escapeHtml(h)}</th>`).join('');
+            globalElements.riskTbody.innerHTML = rt.rows.map(row => `
+                <tr>
+                    <td>${escapeHtml(row.label)}</td>
+                    ${row.values.map(v => {
+                        if (v && v.includes && v.includes('%')) {
+                            return `<td class="col-num">${formatReturn(v)}</td>`;
+                        }
+                        return `<td class="col-num">${escapeHtml(v)}</td>`;
+                    }).join('')}
+                </tr>`).join('');
+        }
+
+        // Holdings
+        const holdings = payload.holdings || [];
+        globalElements.holdingsMeta.textContent = `${holdings.length} מניות`;
+        globalElements.holdingsTbody.innerHTML = holdings.map((h, i) => `
+            <tr>
+                <td class="rank-cell">${i + 1}</td>
+                <td class="col-name">${escapeHtml(h.name)}</td>
+                <td class="weight-cell">${escapeHtml(h.weight)}</td>
+            </tr>`).join('');
+    }
+
+    function renderSpotlightError(msg) {
+        globalElements.spotlightMetrics.innerHTML = `<div class="loading" style="grid-column: 1 / -1;">לא ניתן לטעון נתוני 13F. ${escapeHtml(msg)}</div>`;
+        globalElements.riskTbody.innerHTML = '';
+        globalElements.holdingsTbody.innerHTML = '';
+    }
+
+    function renderGlobalTable() {
+        let indices = globalState.indices;
+
+        if (globalState.sortKey) {
+            const key = globalState.sortKey;
+            const mult = globalState.sortDir === 'asc' ? 1 : -1;
+            indices = [...indices].sort((a, b) => {
+                const aN = parseNumeric(a[key]);
+                const bN = parseNumeric(b[key]);
+                if (aN !== null && bN !== null) return (aN - bN) * mult;
+                if (aN === null && bN !== null) return 1;
+                if (aN !== null && bN === null) return -1;
+                return String(a[key] || '').localeCompare(String(b[key] || ''), 'he') * mult;
+            });
+        }
+
+        if (indices.length === 0) {
+            globalElements.globalTbody.innerHTML = `<tr><td colspan="12" class="loading">אין נתונים</td></tr>`;
+            return;
+        }
+
+        globalElements.globalTbody.innerHTML = indices.map((idx, i) => {
+            const nf = idx.status === 'not_found';
+            return `
+                <tr class="${nf ? 'not-found' : ''}" style="--row-index: ${i}">
+                    <td class="col-name">${escapeHtml(idx.name_he)}<span class="fund-category">${escapeHtml(idx.name)}</span></td>
+                    <td class="col-symbol">${escapeHtml(idx.symbol)}</td>
+                    <td>${escapeHtml(idx.type)}</td>
+                    <td class="col-num">${nf ? '<span class="empty-cell">—</span>' : formatPrice(idx.price)}</td>
+                    <td class="col-num">${formatReturn(idx.daily)}</td>
+                    <td class="col-num">${formatReturn(idx.weekly)}</td>
+                    <td class="col-num">${formatReturn(idx.month_to_date)}</td>
+                    <td class="col-num">${formatReturn(idx.months_3)}</td>
+                    <td class="col-num">${formatReturn(idx.ytd)}</td>
+                    <td class="col-num">${formatReturn(idx.months_12)}</td>
+                    <td class="col-num">${formatReturn(idx.years_3)}</td>
+                    <td class="col-num">${formatReturn(idx.years_5)}</td>
+                </tr>`;
+        }).join('');
+
+        updateSortIndicators(globalElements.globalTable, globalState);
+    }
+
+    /* ==========================================================
+       Tabs + masthead
+       ========================================================== */
+
+    function updateMastheadDate(value) {
+        const el = document.getElementById('updated-at');
+        if (value && (!el.textContent || el.textContent === '—')) el.textContent = value;
+    }
+
+    function setupTabs() {
+        document.querySelectorAll('.tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                const view = tab.dataset.view;
+                document.querySelectorAll('.tab').forEach(t => t.classList.toggle('active', t === tab));
+                document.querySelectorAll('.view').forEach(v => {
+                    v.classList.toggle('active', v.id === `view-${view}`);
+                });
+
+                // Lazy-load global view
+                if (view === 'global' && globalState.indices.length === 0) {
+                    loadGlobal();
+                }
+            });
+        });
+    }
+
+    function updateSortIndicators(table, state) {
+        table.querySelectorAll('th').forEach(th => {
             th.classList.remove('sort-asc', 'sort-desc');
             if (th.dataset.sort === state.sortKey) {
                 th.classList.add(state.sortDir === 'asc' ? 'sort-asc' : 'sort-desc');
@@ -224,15 +360,8 @@
         });
     }
 
-    /* ---------- Event handlers ---------- */
-
-    function attachEventHandlers() {
-        elements.searchInput.addEventListener('input', (e) => {
-            state.search = e.target.value.trim();
-            renderTable();
-        });
-
-        elements.table.querySelectorAll('th[data-sort]').forEach(th => {
+    function setupSortHandlers(table, state, renderFn) {
+        table.querySelectorAll('th[data-sort]').forEach(th => {
             th.addEventListener('click', () => {
                 const key = th.dataset.sort;
                 if (state.sortKey === key) {
@@ -241,27 +370,31 @@
                     state.sortKey = key;
                     state.sortDir = 'desc';
                 }
-                renderTable();
+                renderFn();
             });
         });
     }
 
-    /* ---------- Helpers ---------- */
-
-    function escapeHtml(s) {
-        if (s === null || s === undefined) return '';
-        return String(s)
-            .replace(/&/g, '&amp;')
-            .replace(/</g, '&lt;')
-            .replace(/>/g, '&gt;')
-            .replace(/"/g, '&quot;')
-            .replace(/'/g, '&#39;');
-    }
-
-    /* ---------- Init ---------- */
+    /* ==========================================================
+       Init
+       ========================================================== */
 
     document.addEventListener('DOMContentLoaded', () => {
-        attachEventHandlers();
-        loadData();
+        // Tabs
+        setupTabs();
+
+        // TTF
+        ttfElements.searchInput.addEventListener('input', (e) => {
+            ttfState.search = e.target.value.trim();
+            renderTTFTable();
+        });
+        setupSortHandlers(ttfElements.table, ttfState, renderTTFTable);
+
+        // Global
+        setupSortHandlers(globalElements.globalTable, globalState, renderGlobalTable);
+
+        // Initial loads
+        loadTTF();
+        // Global view loads lazily on first tab click
     });
 })();

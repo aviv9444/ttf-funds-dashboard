@@ -4,10 +4,9 @@ title TTF Dashboard - Daily Update
 
 REM ===========================================================
 REM   TTF Dashboard - Daily update script
-REM   Runs the Python scraper, commits the new JSON, pushes.
+REM   Runs all 3 scrapers, commits new JSON files, pushes to git.
 REM ===========================================================
 
-REM Move to the repo root (one folder up from /scripts)
 cd /d "%~dp0\.."
 
 set LOG=scripts\last_run.log
@@ -17,30 +16,49 @@ echo ============================================================ >> %LOG%
 echo Run started: %DATE% %TIME% >> %LOG%
 echo ============================================================ >> %LOG%
 
-REM Use UTF-8 console so any Hebrew prints correctly
 chcp 65001 >nul
 set PYTHONIOENCODING=utf-8
 
-REM --- Step 1: Run the Python scraper ---------------------------------------
-echo [1/3] Fetching fund returns... >> %LOG%
+REM --- Step 1: Tachlit funds (Bizportal) -----------------------------------
+echo. >> %LOG%
+echo [1/4] Fetching Tachlit funds from Bizportal... >> %LOG%
+echo ------------------------------------------------------------ >> %LOG%
 python scripts\ttf_returns.py >> %LOG% 2>&1
 if errorlevel 1 (
-    echo [ERROR] Python script failed. See %LOG% >> %LOG%
-    goto :end
+    echo [WARN] Tachlit scraper failed - continuing with other sources. >> %LOG%
 )
 
-REM --- Step 2: Check if there is anything to commit -------------------------
+REM --- Step 2: Indxx 13F Index ---------------------------------------------
 echo. >> %LOG%
-echo [2/3] Checking for changes... >> %LOG%
-git diff --quiet docs/data/funds.json
+echo [2/4] Fetching Indxx 13F Index... >> %LOG%
+echo ------------------------------------------------------------ >> %LOG%
+python scripts\indxx_returns.py >> %LOG% 2>&1
+if errorlevel 1 (
+    echo [WARN] Indxx scraper failed - continuing. >> %LOG%
+)
+
+REM --- Step 3: Global indices (yfinance) -----------------------------------
+echo. >> %LOG%
+echo [3/4] Fetching global indices from yfinance... >> %LOG%
+echo ------------------------------------------------------------ >> %LOG%
+python scripts\global_returns.py >> %LOG% 2>&1
+if errorlevel 1 (
+    echo [WARN] Global indices scraper failed - continuing. >> %LOG%
+)
+
+REM --- Step 4: Commit and push ---------------------------------------------
+echo. >> %LOG%
+echo [4/4] Checking for changes... >> %LOG%
+echo ------------------------------------------------------------ >> %LOG%
+
+git diff --quiet docs/data/
 if not errorlevel 1 (
     echo No changes detected - nothing to commit. >> %LOG%
     goto :end
 )
 
-REM --- Step 3: Commit and push ----------------------------------------------
-echo [3/3] Committing and pushing... >> %LOG%
-git add docs/data/funds.json >> %LOG% 2>&1
+echo Committing and pushing... >> %LOG%
+git add docs/data/ >> %LOG% 2>&1
 
 for /f "tokens=1-3 delims=/ " %%a in ('date /t') do set TODAY=%%c-%%b-%%a
 git commit -m "Daily update - %TODAY%" >> %LOG% 2>&1
@@ -63,7 +81,6 @@ echo. >> %LOG%
 echo Run finished: %DATE% %TIME% >> %LOG%
 echo ============================================================ >> %LOG%
 
-REM Show log if running interactively (not via Task Scheduler)
 if "%1" neq "/silent" (
     type %LOG%
     pause

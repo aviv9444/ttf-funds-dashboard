@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>תכלית TTF · לוח תשואות קרנות מחקות</title>
-    <meta name="description" content="לוח תשואות מתעדכן יומית עבור כל קרנות תכלית TTF המחקות">
+    <title>תכלית TTF · לוח תשואות</title>
+    <meta name="description" content="לוח תשואות מתעדכן יומית: קרנות תכלית TTF + מדדים בינלאומיים">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -17,67 +17,164 @@
         <div class="container">
             <div class="brand">
                 <h1 class="brand__title">תכלית <span class="brand__ttf">TTF</span></h1>
-                <p class="brand__subtitle">לוח תשואות קרנות מחקות</p>
+                <p class="brand__subtitle">לוח תשואות · נתונים מתעדכנים יומית</p>
             </div>
             <div class="meta">
                 <div class="meta__item">
                     <span class="meta__label">עודכן לאחרונה</span>
                     <span class="meta__value" id="updated-at">—</span>
                 </div>
-                <div class="meta__item">
-                    <span class="meta__label">סך קרנות</span>
-                    <span class="meta__value" id="total-funds">—</span>
-                </div>
             </div>
         </div>
+
+        <nav class="tabs container">
+            <button class="tab active" data-view="ttf">קרנות תכלית</button>
+            <button class="tab" data-view="global">מדדים בינלאומיים</button>
+        </nav>
     </header>
 
     <main class="container">
-        <section class="controls" aria-label="פילטרים">
-            <div class="search">
-                <svg class="search__icon" viewBox="0 0 20 20" fill="none" aria-hidden="true">
-                    <circle cx="9" cy="9" r="6.5" stroke="currentColor" stroke-width="1.5"/>
-                    <path d="M14 14L18 18" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-                </svg>
-                <input type="text" id="search-input" placeholder="חיפוש לפי שם קרן או מספר…" autocomplete="off">
+
+        <!-- ============================================================
+             VIEW 1: TTF Funds
+             ============================================================ -->
+        <section class="view view-ttf active" id="view-ttf">
+            <div class="view-header">
+                <div class="meta-inline">
+                    <span class="meta-inline__label">סך קרנות:</span>
+                    <span class="meta-inline__value" id="ttf-total">—</span>
+                </div>
             </div>
 
-            <div class="categories" id="category-chips" role="tablist"></div>
+            <div class="controls" aria-label="פילטרים">
+                <div class="search">
+                    <svg class="search__icon" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+                        <circle cx="9" cy="9" r="6.5" stroke="currentColor" stroke-width="1.5"/>
+                        <path d="M14 14L18 18" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                    </svg>
+                    <input type="text" id="ttf-search" placeholder="חיפוש לפי שם קרן או מספר…" autocomplete="off">
+                </div>
+                <div class="categories" id="ttf-categories" role="tablist"></div>
+            </div>
+
+            <div class="table-wrapper">
+                <div class="table-scroll">
+                    <table class="data-table" id="ttf-table">
+                        <thead>
+                            <tr>
+                                <th class="col-name" data-sort="name">שם הקרן</th>
+                                <th class="col-id" data-sort="fund_id">מס' קרן</th>
+                                <th class="col-num" data-sort="price">מחיר</th>
+                                <th class="col-num" data-sort="daily">יומי</th>
+                                <th class="col-num" data-sort="weekly">שבועי</th>
+                                <th class="col-num" data-sort="month_to_date">החודש</th>
+                                <th class="col-num" data-sort="months_3">3 חודשים</th>
+                                <th class="col-num" data-sort="ytd">השנה</th>
+                                <th class="col-num" data-sort="months_12">12 ח׳</th>
+                                <th class="col-num" data-sort="years_3">3 שנים</th>
+                                <th class="col-num" data-sort="years_5">5 שנים</th>
+                                <th class="col-num" data-sort="y2025">2025</th>
+                                <th class="col-num" data-sort="y2024">2024</th>
+                                <th class="col-num" data-sort="y2023">2023</th>
+                            </tr>
+                        </thead>
+                        <tbody id="ttf-tbody">
+                            <tr><td colspan="14" class="loading">טוען נתונים…</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <p class="results-count" id="ttf-count"></p>
+            </div>
         </section>
 
-        <section class="table-wrapper">
-            <div class="table-scroll">
-                <table class="funds-table" id="funds-table">
-                    <thead>
-                        <tr>
-                            <th class="col-name" data-sort="name">שם הקרן</th>
-                            <th class="col-id" data-sort="fund_id">מס' קרן</th>
-                            <th class="col-num" data-sort="price">מחיר</th>
-                            <th class="col-num" data-sort="daily">יומי</th>
-                            <th class="col-num" data-sort="weekly">שבועי</th>
-                            <th class="col-num" data-sort="month_to_date">החודש</th>
-                            <th class="col-num" data-sort="months_3">3 חודשים</th>
-                            <th class="col-num" data-sort="ytd">השנה</th>
-                            <th class="col-num" data-sort="months_12">12 ח׳</th>
-                            <th class="col-num" data-sort="years_3">3 שנים</th>
-                            <th class="col-num" data-sort="years_5">5 שנים</th>
-                            <th class="col-num" data-sort="y2025">2025</th>
-                            <th class="col-num" data-sort="y2024">2024</th>
-                            <th class="col-num" data-sort="y2023">2023</th>
-                        </tr>
-                    </thead>
-                    <tbody id="funds-tbody">
-                        <tr><td colspan="14" class="loading">טוען נתונים…</td></tr>
-                    </tbody>
-                </table>
+        <!-- ============================================================
+             VIEW 2: Global Indices
+             ============================================================ -->
+        <section class="view view-global" id="view-global">
+
+            <!-- 13F Spotlight -->
+            <div class="spotlight">
+                <div class="spotlight__head">
+                    <h2 class="spotlight__title">
+                        Indxx Super Institutional Investors 13F
+                    </h2>
+                    <p class="spotlight__subtitle">
+                        מדד שעוקב אחרי המניות הפופולריות אצל משקיעים מוסדיים גדולים (13F filings)
+                    </p>
+                </div>
+
+                <div class="spotlight__metrics" id="spotlight-metrics">
+                    <div class="loading">טוען…</div>
+                </div>
+
+                <div class="spotlight__lower">
+                    <div class="risk-table-wrapper">
+                        <h3 class="section-title">סטטיסטיקות סיכון ותשואה</h3>
+                        <table class="data-table risk-table" id="risk-table">
+                            <thead><tr id="risk-thead"></tr></thead>
+                            <tbody id="risk-tbody"></tbody>
+                        </table>
+                    </div>
+
+                    <div class="holdings-wrapper">
+                        <h3 class="section-title">
+                            <span>החזקות במדד</span>
+                            <span class="section-meta" id="holdings-meta"></span>
+                        </h3>
+                        <div class="holdings-scroll">
+                            <table class="data-table holdings-table">
+                                <thead>
+                                    <tr>
+                                        <th>#</th>
+                                        <th class="col-name">חברה</th>
+                                        <th>משקל</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="holdings-tbody"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <p class="results-count" id="results-count"></p>
+
+            <!-- Global Indices Comparison -->
+            <div class="indices-section">
+                <h3 class="section-title">השוואת מדדים גלובליים</h3>
+                <p class="section-note">נתונים מ-Yahoo Finance · תשואות כוללות דיבידנדים מושקעים מחדש</p>
+
+                <div class="table-wrapper">
+                    <div class="table-scroll">
+                        <table class="data-table" id="global-table">
+                            <thead>
+                                <tr>
+                                    <th class="col-name" data-sort="name_he">מדד / נכס</th>
+                                    <th data-sort="symbol">סימול</th>
+                                    <th data-sort="type">סוג</th>
+                                    <th class="col-num" data-sort="price">מחיר</th>
+                                    <th class="col-num" data-sort="daily">יומי</th>
+                                    <th class="col-num" data-sort="weekly">שבועי</th>
+                                    <th class="col-num" data-sort="month_to_date">חודשי</th>
+                                    <th class="col-num" data-sort="months_3">3 ח׳</th>
+                                    <th class="col-num" data-sort="ytd">השנה</th>
+                                    <th class="col-num" data-sort="months_12">12 ח׳</th>
+                                    <th class="col-num" data-sort="years_3">3 שנים</th>
+                                    <th class="col-num" data-sort="years_5">5 שנים</th>
+                                </tr>
+                            </thead>
+                            <tbody id="global-tbody">
+                                <tr><td colspan="12" class="loading">טוען נתונים…</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
         </section>
     </main>
 
     <footer class="footer">
         <div class="container">
-            <p>נתונים: בּיזפורטל · קטלוג קרנות תכלית TTF · המידע אינו מהווה ייעוץ השקעות</p>
+            <p>נתונים: בּיזפורטל · Indxx · Yahoo Finance · המידע אינו מהווה ייעוץ השקעות</p>
         </div>
     </footer>
 
