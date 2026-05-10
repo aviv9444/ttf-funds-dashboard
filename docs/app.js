@@ -5,7 +5,7 @@
 (function () {
     'use strict';
 
-    const DATA_URL = '../data/funds.json';
+    const DATA_URL = 'data/funds.json';
 
     const state = {
         funds: [],

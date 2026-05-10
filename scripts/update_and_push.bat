@@ -32,7 +32,7 @@ if errorlevel 1 (
 REM --- Step 2: Check if there is anything to commit -------------------------
 echo. >> %LOG%
 echo [2/3] Checking for changes... >> %LOG%
-git diff --quiet data/funds.json
+git diff --quiet docs/data/funds.json
 if not errorlevel 1 (
     echo No changes detected - nothing to commit. >> %LOG%
     goto :end
@@ -40,7 +40,7 @@ if not errorlevel 1 (
 
 REM --- Step 3: Commit and push ----------------------------------------------
 echo [3/3] Committing and pushing... >> %LOG%
-git add data/funds.json >> %LOG% 2>&1
+git add docs/data/funds.json >> %LOG% 2>&1
 
 for /f "tokens=1-3 delims=/ " %%a in ('date /t') do set TODAY=%%c-%%b-%%a
 git commit -m "Daily update - %TODAY%" >> %LOG% 2>&1

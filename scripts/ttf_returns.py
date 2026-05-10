@@ -298,7 +298,7 @@ def main():
     # Save JSON
     script_dir = Path(__file__).resolve().parent
     repo_root = script_dir.parent
-    output_path = repo_root / "data" / "funds.json"
+    output_path = repo_root / "docs" / "data" / "funds.json"
     output_path.parent.mkdir(parents=True, exist_ok=True)
 
     payload = {
