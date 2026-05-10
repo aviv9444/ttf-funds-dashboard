@@ -188,6 +188,7 @@
 
     const globalElements = {
         spotlightMetrics: document.getElementById('spotlight-metrics'),
+        comparisonSection: document.getElementById('comparison-section'),
         riskThead: document.getElementById('risk-thead'),
         riskTbody: document.getElementById('risk-tbody'),
         holdingsTbody: document.getElementById('holdings-tbody'),
@@ -197,57 +198,104 @@
     };
 
     async function loadGlobal() {
-        // Load Indxx 13F
-        try {
-            const r = await fetch('data/indxx_13f.json?_=' + Date.now());
-            if (r.ok) {
-                const payload = await r.json();
-                renderSpotlight(payload);
-            } else {
-                renderSpotlightError('לא הצלחנו לטעון נתוני 13F');
+        const ts = Date.now();
+        const [indxxRes, globalRes] = await Promise.all([
+            fetch('data/indxx_13f.json?_=' + ts).catch(() => null),
+            fetch('data/global_indices.json?_=' + ts).catch(() => null),
+        ]);
+
+        let spyData = null;
+
+        // Global indices
+        if (globalRes && globalRes.ok) {
+            try {
+                const payload = await globalRes.json();
+                globalState.indices = payload.indices || [];
+                spyData = globalState.indices.find(i => i.symbol === 'SPY') || null;
+                renderGlobalTable();
+            } catch (err) {
+                console.error('Global parse failed:', err);
+                globalElements.globalTbody.innerHTML = `<tr><td colspan="12" class="loading">שגיאה בפענוח מדדים גלובליים</td></tr>`;
             }
-        } catch (err) {
-            console.error('Indxx load failed:', err);
-            renderSpotlightError(err.message);
+        } else {
+            globalElements.globalTbody.innerHTML = `<tr><td colspan="12" class="loading">שגיאה בטעינת מדדים גלובליים</td></tr>`;
         }
 
-        // Load global indices
-        try {
-            const r = await fetch('data/global_indices.json?_=' + Date.now());
-            if (r.ok) {
-                const payload = await r.json();
-                globalState.indices = payload.indices || [];
-                renderGlobalTable();
-            } else {
-                globalElements.globalTbody.innerHTML = `<tr><td colspan="12" class="loading">שגיאה בטעינת מדדים גלובליים</td></tr>`;
+        // Indxx 13F
+        if (indxxRes && indxxRes.ok) {
+            try {
+                const payload = await indxxRes.json();
+                renderSpotlight(payload, spyData);
+            } catch (err) {
+                console.error('Indxx parse failed:', err);
+                renderSpotlightError(err.message);
             }
-        } catch (err) {
-            console.error('Global load failed:', err);
-            globalElements.globalTbody.innerHTML = `<tr><td colspan="12" class="loading">שגיאה: ${err.message}</td></tr>`;
+        } else {
+            renderSpotlightError('לא הצלחנו לטעון נתוני 13F');
         }
     }
 
-    function renderSpotlight(payload) {
+    function annToCum(pctStr, years) {
+        const n = parseNumeric(pctStr);
+        if (n === null) return pctStr || '—';
+        const cum = ((1 + n / 100) ** years - 1) * 100;
+        return (cum >= 0 ? '+' : '') + cum.toFixed(1) + '%';
+    }
+
+    function renderSpotlight(payload, spyData) {
         if (payload.status === 'error') {
             renderSpotlightError(payload.error || 'שגיאה לא ידועה');
             return;
         }
 
         const summary = payload.returns_summary || {};
+        const cum3y = annToCum(summary['3y'], 3);
 
-        // Metric cards
+        // Metric cards — 3Y shown as cumulative
         const metrics = [
-            { label: 'YTD',         key: 'ytd' },
-            { label: '1 Year',      key: '1y' },
-            { label: '3 Years (annualized)', key: '3y' },
-            { label: 'Since Base',  key: 'since_base' },
+            { label: 'מתחילת שנה (YTD)', value: summary.ytd },
+            { label: 'שנה אחרונה',        value: summary['1y'] },
+            { label: '3 שנים (מצטבר)',    value: cum3y },
+            { label: 'מאז הקמה',          value: summary.since_base },
         ];
 
         globalElements.spotlightMetrics.innerHTML = metrics.map(m => `
             <div class="metric-card">
                 <div class="metric-card__label">${m.label}</div>
-                <div class="metric-card__value">${formatBigMetric(summary[m.key])}</div>
+                <div class="metric-card__value">${formatBigMetric(m.value)}</div>
             </div>`).join('');
+
+        // Comparison table: 13F vs S&P 500
+        if (globalElements.comparisonSection) {
+            const rows = [
+                { label: 'Indxx 13F',   ytd: summary.ytd, y1: summary['1y'], y3: cum3y },
+                spyData ? { label: 'S&P 500 (SPY)', ytd: spyData.ytd, y1: spyData.months_12, y3: spyData.years_3 } : null,
+            ].filter(Boolean);
+
+            globalElements.comparisonSection.innerHTML = `
+                <h3 class="section-title" style="margin-top:1.5rem;">השוואה: Indxx 13F מול S&amp;P 500</h3>
+                <div class="table-wrapper" style="margin-bottom:1.5rem;">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th class="col-name">מדד</th>
+                                <th class="col-num">מתחילת שנה</th>
+                                <th class="col-num">שנה אחרונה</th>
+                                <th class="col-num">3 שנים (מצטבר)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${rows.map(r => `
+                                <tr>
+                                    <td class="col-name">${escapeHtml(r.label)}</td>
+                                    <td class="col-num">${formatReturn(r.ytd)}</td>
+                                    <td class="col-num">${formatReturn(r.y1)}</td>
+                                    <td class="col-num">${formatReturn(r.y3)}</td>
+                                </tr>`).join('')}
+                        </tbody>
+                    </table>
+                </div>`;
+        }
 
         // Risk & Return table
         const rt = payload.returns_table;
@@ -278,6 +326,7 @@
 
     function renderSpotlightError(msg) {
         globalElements.spotlightMetrics.innerHTML = `<div class="loading" style="grid-column: 1 / -1;">לא ניתן לטעון נתוני 13F. ${escapeHtml(msg)}</div>`;
+        if (globalElements.comparisonSection) globalElements.comparisonSection.innerHTML = '';
         globalElements.riskTbody.innerHTML = '';
         globalElements.holdingsTbody.innerHTML = '';
     }
