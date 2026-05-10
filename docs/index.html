@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>תכלית TTF · לוח תשואות קרנות מחקות</title>
+    <meta name="description" content="לוח תשואות מתעדכן יומית עבור כל קרנות תכלית TTF המחקות">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@400;500;700;900&family=Heebo:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header class="masthead">
+        <div class="container">
+            <div class="brand">
+                <h1 class="brand__title">תכלית <span class="brand__ttf">TTF</span></h1>
+                <p class="brand__subtitle">לוח תשואות קרנות מחקות</p>
+            </div>
+            <div class="meta">
+                <div class="meta__item">
+                    <span class="meta__label">עודכן לאחרונה</span>
+                    <span class="meta__value" id="updated-at">—</span>
+                </div>
+                <div class="meta__item">
+                    <span class="meta__label">סך קרנות</span>
+                    <span class="meta__value" id="total-funds">—</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="container">
+        <section class="controls" aria-label="פילטרים">
+            <div class="search">
+                <svg class="search__icon" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+                    <circle cx="9" cy="9" r="6.5" stroke="currentColor" stroke-width="1.5"/>
+                    <path d="M14 14L18 18" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                </svg>
+                <input type="text" id="search-input" placeholder="חיפוש לפי שם קרן או מספר…" autocomplete="off">
+            </div>
+
+            <div class="categories" id="category-chips" role="tablist"></div>
+        </section>
+
+        <section class="table-wrapper">
+            <div class="table-scroll">
+                <table class="funds-table" id="funds-table">
+                    <thead>
+                        <tr>
+                            <th class="col-name" data-sort="name">שם הקרן</th>
+                            <th class="col-id" data-sort="fund_id">מס' קרן</th>
+                            <th class="col-num" data-sort="price">מחיר</th>
+                            <th class="col-num" data-sort="daily">יומי</th>
+                            <th class="col-num" data-sort="weekly">שבועי</th>
+                            <th class="col-num" data-sort="month_to_date">החודש</th>
+                            <th class="col-num" data-sort="months_3">3 חודשים</th>
+                            <th class="col-num" data-sort="ytd">השנה</th>
+                            <th class="col-num" data-sort="months_12">12 ח׳</th>
+                            <th class="col-num" data-sort="years_3">3 שנים</th>
+                            <th class="col-num" data-sort="years_5">5 שנים</th>
+                            <th class="col-num" data-sort="y2025">2025</th>
+                            <th class="col-num" data-sort="y2024">2024</th>
+                            <th class="col-num" data-sort="y2023">2023</th>
+                        </tr>
+                    </thead>
+                    <tbody id="funds-tbody">
+                        <tr><td colspan="14" class="loading">טוען נתונים…</td></tr>
+                    </tbody>
+                </table>
+            </div>
+            <p class="results-count" id="results-count"></p>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <p>נתונים: בּיזפורטל · קטלוג קרנות תכלית TTF · המידע אינו מהווה ייעוץ השקעות</p>
+        </div>
+    </footer>
+
+    <script src="app.js"></script>
+</body>
+</html>
