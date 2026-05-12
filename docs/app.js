@@ -268,29 +268,39 @@
         // Comparison table: 13F vs S&P 500
         if (globalElements.comparisonSection) {
             const rows = [
-                { label: 'Indxx 13F',   ytd: summary.ytd, y1: summary['1y'], y3: cum3y },
-                spyData ? { label: 'S&P 500 (SPY)', ytd: spyData.ytd, y1: spyData.months_12, y3: spyData.years_3 } : null,
+                { label: 'סופר משקיעים 13F', id: 'מס׳ קרן 5141833', ytd: summary.ytd, y1: summary['1y'], y3: cum3y },
+                spyData ? { label: 'S&P 500', id: 'SPY', ytd: spyData.ytd, y1: spyData.months_12, y3: spyData.years_3 } : null,
             ].filter(Boolean);
 
+            const fields = ['ytd', 'y1', 'y3'];
+            const winners = fields.map(f => {
+                const vals = rows.map(r => parseNumeric(r[f]) ?? -Infinity);
+                const max = Math.max(...vals);
+                return rows.map((_, i) => isFinite(max) && vals[i] === max);
+            });
+
             globalElements.comparisonSection.innerHTML = `
-                <h3 class="section-title" style="margin-top:1.5rem;">השוואה: Indxx 13F מול S&amp;P 500</h3>
-                <div class="table-wrapper" style="margin-bottom:1.5rem;">
-                    <table class="data-table">
+                <div class="cmp-wrap">
+                    <p class="cmp-title">השוואת ביצועים</p>
+                    <table class="cmp-table">
                         <thead>
                             <tr>
-                                <th class="col-name">מדד</th>
-                                <th class="col-num">מתחילת שנה</th>
-                                <th class="col-num">שנה אחרונה</th>
-                                <th class="col-num">3 שנים (מצטבר)</th>
+                                <th>מדד / קרן</th>
+                                <th>מתחילת שנה</th>
+                                <th>שנה אחרונה</th>
+                                <th>3 שנים מצטבר</th>
                             </tr>
                         </thead>
                         <tbody>
-                            ${rows.map(r => `
+                            ${rows.map((r, ri) => `
                                 <tr>
-                                    <td class="col-name">${escapeHtml(r.label)}</td>
-                                    <td class="col-num">${formatReturn(r.ytd)}</td>
-                                    <td class="col-num">${formatReturn(r.y1)}</td>
-                                    <td class="col-num">${formatReturn(r.y3)}</td>
+                                    <td>
+                                        <span class="cmp-name">${escapeHtml(r.label)}</span>
+                                        <span class="cmp-id">${escapeHtml(r.id)}</span>
+                                    </td>
+                                    ${fields.map((f, fi) =>
+                                        `<td${winners[fi][ri] ? ' class="cmp-best"' : ''}>${formatReturn(r[f])}</td>`
+                                    ).join('')}
                                 </tr>`).join('')}
                         </tbody>
                     </table>
