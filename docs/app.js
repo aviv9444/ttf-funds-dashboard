@@ -295,11 +295,15 @@
                                     </tr>`).join('')}
                             </tbody>
                         </table>
-                        ${summary.since_base ? `
+                        ${(() => {
+                            const israeliFund = ttfState.funds.find(f => f.fund_id === '5141833');
+                            const sinceVal = israeliFund ? israeliFund.ytd : null;
+                            return sinceVal ? `
                         <div class="cmp-since-base">
-                            <span class="cmp-since-label">תשואה מאז הקמה (מרץ 2021)</span>
-                            <span class="cmp-since-value">${formatReturn(summary.since_base)}</span>
-                        </div>` : ''}
+                            <span class="cmp-since-label">תשואה מאז הקמה (20.01.26)</span>
+                            <span class="cmp-since-value">${formatReturn(sinceVal)}</span>
+                        </div>` : '';
+                        })()}
                     </div>
                 </div>`;
         }
