@@ -670,6 +670,41 @@ body {
     filter: brightness(0.88) contrast(1.05);
 }
 
+.spotlight__metrics:empty {
+    display: none;
+}
+
+.cmp-since-base {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 13px 20px;
+    background: #0D0900;
+    border-top: 1px solid rgba(196,149,42,0.22);
+}
+
+.cmp-since-label {
+    font-family: var(--font-body);
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: #8A7040;
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+}
+
+.cmp-since-value {
+    font-family: var(--font-mono);
+    font-size: 1.1rem;
+    font-weight: 700;
+}
+
+.cmp-since-value .return-pos {
+    color: #6EE89A;
+    background: rgba(60,180,90,0.18);
+    padding: 4px 12px;
+    border-radius: 4px;
+}
+
 .spotlight__holdings {
     padding: 24px 28px;
     border-top: 1px solid var(--line);

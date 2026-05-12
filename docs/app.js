@@ -249,19 +249,8 @@
         const summary = payload.returns_summary || {};
         const cum3y = annToCum(summary['3y'], 3);
 
-        // Metric cards — 3Y shown as cumulative
-        const metrics = [
-            { label: 'מתחילת שנה (YTD)', value: summary.ytd },
-            { label: 'שנה אחרונה',        value: summary['1y'] },
-            { label: '3 שנים (מצטבר)',    value: cum3y },
-            { label: 'מאז הקמה',          value: summary.since_base },
-        ];
-
-        globalElements.spotlightMetrics.innerHTML = metrics.map(m => `
-            <div class="metric-card">
-                <div class="metric-card__label">${m.label}</div>
-                <div class="metric-card__value">${formatBigMetric(m.value)}</div>
-            </div>`).join('');
+        // Metric cards removed — data shown in comparison table instead
+        globalElements.spotlightMetrics.innerHTML = '';
 
         // Comparison table: 13F vs S&P 500
         if (globalElements.comparisonSection) {
@@ -306,6 +295,11 @@
                                     </tr>`).join('')}
                             </tbody>
                         </table>
+                        ${summary.since_base ? `
+                        <div class="cmp-since-base">
+                            <span class="cmp-since-label">תשואה מאז הקמה (מרץ 2021)</span>
+                            <span class="cmp-since-value">${formatReturn(summary.since_base)}</span>
+                        </div>` : ''}
                     </div>
                 </div>`;
         }
