@@ -189,8 +189,6 @@
     const globalElements = {
         spotlightMetrics: document.getElementById('spotlight-metrics'),
         comparisonSection: document.getElementById('comparison-section'),
-        riskThead: document.getElementById('risk-thead'),
-        riskTbody: document.getElementById('risk-tbody'),
         holdingsTbody: document.getElementById('holdings-tbody'),
         holdingsMeta: document.getElementById('holdings-meta'),
         globalTbody: document.getElementById('global-tbody'),
@@ -269,7 +267,7 @@
         if (globalElements.comparisonSection) {
             const rows = [
                 { label: 'סופר משקיעים 13F', id: 'מס׳ קרן 5141833', ytd: summary.ytd, y1: summary['1y'], y3: cum3y },
-                spyData ? { label: 'S&P 500', id: 'SPY', ytd: spyData.ytd, y1: spyData.months_12, y3: spyData.years_3 } : null,
+                spyData ? { label: 'S&P 500', id: '', ytd: spyData.ytd, y1: spyData.months_12, y3: spyData.years_3 } : null,
             ].filter(Boolean);
 
             const fields = ['ytd', 'y1', 'y3'];
@@ -279,8 +277,51 @@
                 return rows.map((_, i) => isFinite(max) && vals[i] === max);
             });
 
+            const investorSvg = `<svg viewBox="0 0 300 108" xmlns="http://www.w3.org/2000/svg" fill="none" class="cmp-heroes-svg" aria-hidden="true">
+  <polyline points="0,95 25,82 55,86 85,68 115,72 145,52 175,56 205,38 235,42 265,24 295,28 300,26" stroke="#4A1432" stroke-width="1" stroke-opacity="0.09"/>
+  <!-- Warren Buffett -->
+  <path d="M48,108 L44,80 Q46,71 55,67 L64,64 L68,61 L75,69 L82,61 L86,64 Q95,67 106,71 L102,108" stroke="#1A1612" stroke-width="1.4" stroke-linejoin="round"/>
+  <path d="M71,61 L75,69" stroke="#1A1612" stroke-width="0.9"/>
+  <line x1="75" y1="69" x2="75" y2="79" stroke="#1A1612" stroke-width="0.8"/>
+  <ellipse cx="75" cy="41" rx="21" ry="22" stroke="#1A1612" stroke-width="1.4"/>
+  <path d="M56,34 Q60,24 75,22 Q90,24 94,34" stroke="#1A1612" stroke-width="0.9" fill="#1A1612" fill-opacity="0.06"/>
+  <circle cx="67" cy="42" r="7.5" stroke="#1A1612" stroke-width="1.1"/>
+  <circle cx="83" cy="42" r="7.5" stroke="#1A1612" stroke-width="1.1"/>
+  <line x1="74.5" y1="42" x2="75.5" y2="42" stroke="#1A1612" stroke-width="1.1"/>
+  <line x1="59.5" y1="42" x2="55" y2="40" stroke="#1A1612" stroke-width="1"/>
+  <line x1="90.5" y1="42" x2="95" y2="40" stroke="#1A1612" stroke-width="1"/>
+  <path d="M75,45 L73,51 L77,51" stroke="#1A1612" stroke-width="0.9"/>
+  <path d="M67,56 Q75,62 83,56" stroke="#1A1612" stroke-width="1.2"/>
+  <path d="M54,40 Q51,43 52,47 Q53,50 55,48" stroke="#1A1612" stroke-width="0.9"/>
+  <path d="M96,40 Q99,43 98,47 Q97,50 95,48" stroke="#1A1612" stroke-width="0.9"/>
+  <text x="75" y="106" text-anchor="middle" font-family="Georgia,serif" font-size="7" fill="#4A1432" letter-spacing="0.5" opacity="0.65">Warren Buffett</text>
+  <!-- Divider -->
+  <line x1="150" y1="14" x2="150" y2="96" stroke="#4A1432" stroke-width="0.5" stroke-opacity="0.13" stroke-dasharray="3,4"/>
+  <text x="150" y="58" text-anchor="middle" font-family="Georgia,serif" font-size="10" fill="#4A1432" opacity="0.07" font-weight="bold">13F</text>
+  <!-- Charlie Munger -->
+  <path d="M198,108 L194,80 Q196,71 205,67 L214,64 L218,61 L225,69 L232,61 L236,64 Q245,67 256,71 L252,108" stroke="#1A1612" stroke-width="1.4" stroke-linejoin="round"/>
+  <path d="M221,61 L225,69" stroke="#1A1612" stroke-width="0.9"/>
+  <line x1="225" y1="69" x2="225" y2="79" stroke="#1A1612" stroke-width="0.8"/>
+  <ellipse cx="225" cy="41" rx="21" ry="22" stroke="#1A1612" stroke-width="1.4"/>
+  <path d="M205,33 Q208,21 225,19 Q242,21 245,33" stroke="#1A1612" stroke-width="0.9" fill="#1A1612" fill-opacity="0.1"/>
+  <path d="M213,36 Q220,32 226,35" stroke="#1A1612" stroke-width="2" stroke-linecap="round"/>
+  <path d="M224,35 Q230,32 237,36" stroke="#1A1612" stroke-width="2" stroke-linecap="round"/>
+  <ellipse cx="218" cy="43" rx="5.5" ry="5" stroke="#1A1612" stroke-width="1.1"/>
+  <ellipse cx="232" cy="43" rx="5.5" ry="5" stroke="#1A1612" stroke-width="1.1"/>
+  <circle cx="218" cy="43" r="2.5" fill="#1A1612"/>
+  <circle cx="232" cy="43" r="2.5" fill="#1A1612"/>
+  <path d="M225,46 L223,52 L227,52" stroke="#1A1612" stroke-width="0.9"/>
+  <path d="M218,57 Q225,60 232,57" stroke="#1A1612" stroke-width="1.1"/>
+  <path d="M204,40 Q201,43 202,47 Q203,50 205,48" stroke="#1A1612" stroke-width="0.9"/>
+  <path d="M246,40 Q249,43 248,47 Q247,50 245,48" stroke="#1A1612" stroke-width="0.9"/>
+  <text x="225" y="106" text-anchor="middle" font-family="Georgia,serif" font-size="7" fill="#4A1432" letter-spacing="0.5" opacity="0.65">Charlie Munger</text>
+  <text x="132" y="32" font-family="Georgia,serif" font-size="13" fill="#B8860B" opacity="0.18">$</text>
+  <text x="162" y="78" font-family="Georgia,serif" font-size="10" fill="#B8860B" opacity="0.13">$</text>
+</svg>`;
+
             globalElements.comparisonSection.innerHTML = `
                 <div class="cmp-wrap">
+                    ${investorSvg}
                     <p class="cmp-title">השוואת ביצועים</p>
                     <table class="cmp-table">
                         <thead>
@@ -296,7 +337,7 @@
                                 <tr>
                                     <td>
                                         <span class="cmp-name">${escapeHtml(r.label)}</span>
-                                        <span class="cmp-id">${escapeHtml(r.id)}</span>
+                                        ${r.id ? `<span class="cmp-id">${escapeHtml(r.id)}</span>` : ''}
                                     </td>
                                     ${fields.map((f, fi) =>
                                         `<td${winners[fi][ri] ? ' class="cmp-best"' : ''}>${formatReturn(r[f])}</td>`
@@ -305,22 +346,6 @@
                         </tbody>
                     </table>
                 </div>`;
-        }
-
-        // Risk & Return table
-        const rt = payload.returns_table;
-        if (rt) {
-            globalElements.riskThead.innerHTML = rt.headers.map(h => `<th>${escapeHtml(h)}</th>`).join('');
-            globalElements.riskTbody.innerHTML = rt.rows.map(row => `
-                <tr>
-                    <td>${escapeHtml(row.label)}</td>
-                    ${row.values.map(v => {
-                        if (v && v.includes && v.includes('%')) {
-                            return `<td class="col-num">${formatReturn(v)}</td>`;
-                        }
-                        return `<td class="col-num">${escapeHtml(v)}</td>`;
-                    }).join('')}
-                </tr>`).join('');
         }
 
         // Holdings
@@ -337,7 +362,6 @@
     function renderSpotlightError(msg) {
         globalElements.spotlightMetrics.innerHTML = `<div class="loading" style="grid-column: 1 / -1;">לא ניתן לטעון נתוני 13F. ${escapeHtml(msg)}</div>`;
         if (globalElements.comparisonSection) globalElements.comparisonSection.innerHTML = '';
-        globalElements.riskTbody.innerHTML = '';
         globalElements.holdingsTbody.innerHTML = '';
     }
 
