@@ -466,9 +466,9 @@ body {
 
 .spotlight__head {
     padding: 28px 32px 20px;
-    background: linear-gradient(135deg, var(--burgundy-900) 0%, var(--burgundy-700) 100%);
+    background: linear-gradient(135deg, #0D0900 0%, #2C1D00 55%, #4A3200 100%);
     color: var(--cream);
-    border-bottom: 3px solid var(--crimson);
+    border-bottom: 3px solid #C4952A;
 }
 
 .spotlight__title {
@@ -621,13 +621,20 @@ body {
    Comparison Table Card
    ========================================================== */
 
-.cmp-heroes-svg {
+.cmp-hero-img-wrap {
     width: 100%;
-    height: auto;
+    height: 170px;
+    overflow: hidden;
+    position: relative;
+}
+
+.cmp-hero-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center 38%;
     display: block;
-    max-height: 112px;
-    border-bottom: 1px solid var(--line);
-    background: var(--paper);
+    filter: brightness(0.88) contrast(1.05);
 }
 
 .spotlight__holdings {
@@ -636,16 +643,19 @@ body {
 }
 
 .cmp-wrap {
-    padding: 0 32px 28px;
     background: white;
     border-top: 1px solid var(--line);
+}
+
+.cmp-inner {
+    padding: 0 32px 28px;
 }
 
 .cmp-title {
     font-family: var(--font-display);
     font-size: 1.1rem;
     font-weight: 700;
-    color: var(--burgundy-800);
+    color: #3A2600;
     padding: 18px 0 14px;
     display: flex;
     align-items: center;
@@ -657,7 +667,7 @@ body {
     flex-shrink: 0;
     width: 4px;
     height: 20px;
-    background: var(--crimson);
+    background: linear-gradient(180deg, #C4952A 0%, #8B6510 100%);
     border-radius: 2px;
     display: inline-block;
 }
@@ -670,7 +680,7 @@ body {
 }
 
 .cmp-table thead tr {
-    background: linear-gradient(135deg, var(--burgundy-900) 0%, var(--burgundy-700) 100%);
+    background: linear-gradient(135deg, #0D0900 0%, #2C1D00 55%, #4A3200 100%);
 }
 
 .cmp-table th {
@@ -679,9 +689,9 @@ body {
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.08em;
-    color: var(--cream);
+    color: #E8C97A;
     text-align: center;
-    border-inline-start: 1px solid rgba(255,255,255,0.08);
+    border-inline-start: 1px solid rgba(196,149,42,0.18);
     white-space: nowrap;
 }
 
@@ -720,7 +730,7 @@ body {
 }
 
 .cmp-table td.cmp-best {
-    background: rgba(27, 122, 60, 0.05);
+    background: rgba(196, 149, 42, 0.07);
     position: relative;
 }
 
@@ -730,8 +740,8 @@ body {
     top: 5px;
     inset-inline-start: 5px;
     font-size: 0.48rem;
-    color: var(--positive);
-    opacity: 0.55;
+    color: #8B6510;
+    opacity: 0.7;
 }
 
 .cmp-name {
@@ -763,9 +773,10 @@ body {
 }
 
 @media (max-width: 768px) {
-    .cmp-wrap { padding: 0 20px 24px; }
+    .cmp-inner { padding: 0 20px 24px; }
     .cmp-table td { font-size: 0.95rem; padding: 14px 10px; }
     .cmp-table th { font-size: 0.65rem; padding: 11px 10px; }
+    .cmp-hero-img-wrap { height: 140px; }
     .spotlight__holdings { padding: 18px 20px; }
 }
 
