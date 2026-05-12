@@ -281,9 +281,9 @@
                 <div class="cmp-wrap">
                     <div class="cmp-hero-img-wrap">
                         <img src="super-investors.png" alt="סופר משקיעים" class="cmp-hero-img"/>
+                        <div class="cmp-hero-overlay">השוואת ביצועים</div>
                     </div>
                     <div class="cmp-inner">
-                        <p class="cmp-title">השוואת ביצועים</p>
                         <table class="cmp-table">
                             <thead>
                                 <tr>
