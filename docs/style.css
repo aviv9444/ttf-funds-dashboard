@@ -807,6 +807,21 @@ body {
     font-weight: inherit;
 }
 
+.cmp-table td .return-pos {
+    color: #6EE89A;
+    background: rgba(60, 180, 90, 0.18);
+}
+
+.cmp-table td .return-neg {
+    color: #F28B8B;
+    background: rgba(220, 60, 60, 0.18);
+}
+
+.cmp-table td .return-zero {
+    color: #A09060;
+    background: rgba(160, 140, 80, 0.12);
+}
+
 @media (max-width: 768px) {
     .cmp-inner { padding: 0 0 24px; }
     .cmp-table td { font-size: 0.95rem; padding: 14px 10px; }
