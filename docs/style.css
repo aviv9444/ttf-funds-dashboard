@@ -487,15 +487,17 @@ body {
     line-height: 1.5;
 }
 
-.spotlight__subtitle--bottom {
-    margin: 0;
-    padding: 16px 28px 20px;
-    border-top: 1px solid var(--line);
-    font-size: 0.85rem;
-    color: #8A7040;
-    opacity: 1;
+.cmp-description {
+    margin: 0 20px 20px;
+    padding: 12px 20px;
+    border-top: 1px solid rgba(196,149,42,0.2);
+    border-radius: 6px;
+    font-family: var(--font-body);
+    font-size: 0.82rem;
+    color: #A09060;
     text-align: center;
     font-style: italic;
+    line-height: 1.5;
 }
 
 .spotlight__metrics {
