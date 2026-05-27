@@ -487,6 +487,17 @@ body {
     line-height: 1.5;
 }
 
+.spotlight__subtitle--bottom {
+    margin: 0;
+    padding: 16px 28px 20px;
+    border-top: 1px solid var(--line);
+    font-size: 0.85rem;
+    color: #8A7040;
+    opacity: 1;
+    text-align: center;
+    font-style: italic;
+}
+
 .spotlight__metrics {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
@@ -780,11 +791,11 @@ body {
 .cmp-table tbody tr:last-child  { background: #190F00; }
 
 .cmp-table td {
-    padding: 18px 16px;
+    padding: 22px 18px;
     text-align: center;
     border-inline-start: 1px solid rgba(196,149,42,0.1);
     font-family: var(--font-mono);
-    font-size: 1.1rem;
+    font-size: 1.45rem;
     font-weight: 700;
     font-variant-numeric: tabular-nums;
     white-space: nowrap;
@@ -836,8 +847,8 @@ body {
 .cmp-table td .return-pos,
 .cmp-table td .return-neg,
 .cmp-table td .return-zero {
-    padding: 5px 12px;
-    border-radius: 4px;
+    padding: 7px 16px;
+    border-radius: 6px;
     font-size: inherit;
     font-weight: inherit;
 }
@@ -859,7 +870,7 @@ body {
 
 @media (max-width: 768px) {
     .cmp-inner { padding: 0 0 24px; }
-    .cmp-table td { font-size: 0.95rem; padding: 14px 10px; }
+    .cmp-table td { font-size: 1.15rem; padding: 16px 10px; }
     .cmp-table th { font-size: 0.65rem; padding: 11px 10px; }
     .cmp-hero-img-wrap { height: 160px; }
     .spotlight__holdings { padding: 18px 20px; }
