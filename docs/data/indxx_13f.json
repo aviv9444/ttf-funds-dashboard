@@ -1,14 +1,14 @@
 {
-  "updated_at": "2026-06-09T07:31:54",
-  "updated_at_display": "09/06/2026 07:31",
+  "updated_at": "2026-06-14T08:36:17",
+  "updated_at_display": "14/06/2026 08:36",
   "source": "https://www.indxx.com/index/indxx-super-institutional-investors-13-f-index",
   "index_name": "Indxx Super Institutional Investors Holdings 13F Index",
   "returns_summary": {
-    "qtd": "18.82%",
-    "ytd": "14.78%",
-    "1y": "35.42%",
-    "3y": "26.91%",
-    "since_base": "17%"
+    "qtd": "19.38%",
+    "ytd": "15.32%",
+    "1y": "36.51%",
+    "3y": "26.5%",
+    "since_base": "17.06%"
   },
   "returns_table": {
     "headers": [
@@ -43,21 +43,21 @@
       {
         "label": "Returns²",
         "values": [
-          "18.82%",
-          "14.78%",
-          "35.42%",
-          "26.91%",
-          "17%"
+          "19.38%",
+          "15.32%",
+          "36.51%",
+          "26.5%",
+          "17.06%"
         ]
       },
       {
         "label": "Standard Deviation",
         "values": [
-          "15.89%",
-          "16.5%",
-          "13.31%",
+          "16.74%",
+          "16.85%",
           "13.57%",
-          "14.62%"
+          "13.66%",
+          "14.65%"
         ]
       }
     ]
@@ -65,243 +65,243 @@
   "holdings": [
     {
       "name": "MICRON TECHNOLOGY ORD",
-      "weight": "6.63%"
+      "weight": "6.82%"
     },
     {
       "name": "NVIDIA ORD",
-      "weight": "5.08%"
+      "weight": "4.97%"
     },
     {
       "name": "APPLE ORD",
-      "weight": "3.94%"
+      "weight": "3.78%"
     },
     {
       "name": "ELI LILLY ORD",
-      "weight": "3.51%"
-    },
-    {
-      "name": "ALPHABET CL A ORD",
-      "weight": "2.90%"
-    },
-    {
-      "name": "TAIWAN SEMICONDUCTOR MNFTG ADR 5 ORD",
-      "weight": "2.89%"
+      "weight": "3.44%"
     },
     {
       "name": "ADVANCED MICRO DEVICES ORD",
+      "weight": "2.96%"
+    },
+    {
+      "name": "TAIWAN SEMICONDUCTOR MNFTG ADR 5 ORD",
+      "weight": "2.86%"
+    },
+    {
+      "name": "ALPHABET CL A ORD",
       "weight": "2.85%"
     },
     {
+      "name": "MASTERCARD CL A ORD",
+      "weight": "2.72%"
+    },
+    {
       "name": "MICROSOFT ORD",
-      "weight": "2.84%"
+      "weight": "2.68%"
     },
     {
       "name": "BROADCOM ORD",
-      "weight": "2.75%"
-    },
-    {
-      "name": "MASTERCARD CL A ORD",
-      "weight": "2.71%"
-    },
-    {
-      "name": "ABBVIE ORD",
-      "weight": "2.39%"
-    },
-    {
-      "name": "ORACLE ORD",
-      "weight": "2.31%"
+      "weight": "2.63%"
     },
     {
       "name": "LAM RESEARCH ORD",
-      "weight": "2.25%"
+      "weight": "2.54%"
+    },
+    {
+      "name": "ABBVIE ORD",
+      "weight": "2.43%"
     },
     {
       "name": "VISA CL A ORD",
-      "weight": "2.11%"
-    },
-    {
-      "name": "PALANTIR TECHNOLOGIES CL A ORD",
-      "weight": "2.02%"
-    },
-    {
-      "name": "META PLATFORMS CL A ORD",
-      "weight": "1.98%"
+      "weight": "2.12%"
     },
     {
       "name": "WESTERN DIGITAL ORD",
-      "weight": "1.98%"
+      "weight": "2.11%"
+    },
+    {
+      "name": "ORACLE ORD",
+      "weight": "2.00%"
+    },
+    {
+      "name": "META PLATFORMS CL A ORD",
+      "weight": "1.91%"
     },
     {
       "name": "AMAZON COM ORD",
-      "weight": "1.96%"
+      "weight": "1.90%"
+    },
+    {
+      "name": "PALANTIR TECHNOLOGIES CL A ORD",
+      "weight": "1.89%"
     },
     {
       "name": "TEXAS INSTRUMENTS ORD",
-      "weight": "1.75%"
+      "weight": "1.81%"
     },
     {
       "name": "HOME DEPOT ORD",
-      "weight": "1.67%"
-    },
-    {
-      "name": "CISCO SYSTEMS ORD",
-      "weight": "1.51%"
+      "weight": "1.76%"
     },
     {
       "name": "APPLIED MATERIAL ORD",
-      "weight": "1.46%"
+      "weight": "1.68%"
     },
     {
       "name": "PALO ALTO NETWORKS ORD",
-      "weight": "1.45%"
+      "weight": "1.52%"
+    },
+    {
+      "name": "CISCO SYSTEMS ORD",
+      "weight": "1.46%"
     },
     {
       "name": "MORGAN STANLEY ORD",
-      "weight": "1.44%"
+      "weight": "1.45%"
     },
     {
       "name": "MERCADOLIBRE ORD",
-      "weight": "1.42%"
-    },
-    {
-      "name": "Circle Internet Group Inc Class A",
-      "weight": "1.36%"
+      "weight": "1.40%"
     },
     {
       "name": "MERCK & CO ORD",
-      "weight": "1.33%"
-    },
-    {
-      "name": "INTERNATIONAL BUSINESS MACHINES ORD",
-      "weight": "1.27%"
+      "weight": "1.32%"
     },
     {
       "name": "GENERAL ELECTRIC ORD",
-      "weight": "1.26%"
+      "weight": "1.30%"
     },
     {
       "name": "BLACKROCK ORD",
-      "weight": "1.26%"
+      "weight": "1.30%"
     },
     {
       "name": "WELLTOWER ORD",
-      "weight": "1.20%"
+      "weight": "1.28%"
     },
     {
-      "name": "TESLA ORD",
-      "weight": "1.20%"
-    },
-    {
-      "name": "COCA-COLA ORD",
-      "weight": "1.19%"
+      "name": "Circle Internet Group Inc Class A",
+      "weight": "1.28%"
     },
     {
       "name": "PROLOGIS REIT",
+      "weight": "1.23%"
+    },
+    {
+      "name": "COCA-COLA ORD",
+      "weight": "1.23%"
+    },
+    {
+      "name": "INTERNATIONAL BUSINESS MACHINES ORD",
+      "weight": "1.22%"
+    },
+    {
+      "name": "TESLA ORD",
       "weight": "1.19%"
     },
     {
       "name": "MCDONALDS ORD",
-      "weight": "1.15%"
+      "weight": "1.18%"
+    },
+    {
+      "name": "JPMORGAN CHASE ORD",
+      "weight": "1.17%"
     },
     {
       "name": "UNITEDHEALTH GRP ORD",
       "weight": "1.15%"
     },
     {
-      "name": "NETFLIX ORD",
-      "weight": "1.15%"
-    },
-    {
-      "name": "JPMORGAN CHASE ORD",
-      "weight": "1.14%"
-    },
-    {
       "name": "DOORDASH CL A ORD",
-      "weight": "1.13%"
+      "weight": "1.11%"
+    },
+    {
+      "name": "NETFLIX ORD",
+      "weight": "1.11%"
+    },
+    {
+      "name": "JOHNSON & JOHNSON ORD",
+      "weight": "1.10%"
     },
     {
       "name": "SOFI TECHNOLOGIES ORD",
       "weight": "1.09%"
     },
     {
-      "name": "JOHNSON & JOHNSON ORD",
-      "weight": "1.07%"
+      "name": "BRISTOL MYERS SQUIBB ORD",
+      "weight": "1.08%"
     },
     {
-      "name": "BRISTOL MYERS SQUIBB ORD",
-      "weight": "1.06%"
+      "name": "BOOKING HOLDINGS ORD",
+      "weight": "1.04%"
+    },
+    {
+      "name": "NORFOLK SOUTHERN ORD",
+      "weight": "1.03%"
+    },
+    {
+      "name": "PROCTER & GAMBLE ORD",
+      "weight": "1.03%"
     },
     {
       "name": "BERKSHIRE HATHAWAY CL B ORD",
       "weight": "1.03%"
     },
     {
-      "name": "ELEVANCE HEALTH ORD",
-      "weight": "1.03%"
-    },
-    {
-      "name": "BOOKING HOLDINGS ORD",
-      "weight": "1.02%"
-    },
-    {
-      "name": "NORFOLK SOUTHERN ORD",
-      "weight": "1.02%"
-    },
-    {
       "name": "WALMART ORD",
-      "weight": "1.01%"
-    },
-    {
-      "name": "INTUITIVE SURGICAL ORD",
-      "weight": "1.01%"
-    },
-    {
-      "name": "PROCTER & GAMBLE ORD",
-      "weight": "1.00%"
-    },
-    {
-      "name": "GOLDMAN SACHS GROUP ORD",
-      "weight": "0.97%"
+      "weight": "1.02%"
     },
     {
       "name": "AMERICAN EXPRESS ORD",
-      "weight": "0.96%"
+      "weight": "1.00%"
     },
     {
-      "name": "HILTON WORLDWIDE HOLDINGS ORD",
-      "weight": "0.90%"
+      "name": "ELEVANCE HEALTH ORD",
+      "weight": "0.99%"
+    },
+    {
+      "name": "GOLDMAN SACHS GROUP ORD",
+      "weight": "0.99%"
+    },
+    {
+      "name": "INTUITIVE SURGICAL ORD",
+      "weight": "0.99%"
     },
     {
       "name": "BANK OF AMERICA ORD",
-      "weight": "0.90%"
+      "weight": "0.93%"
+    },
+    {
+      "name": "HILTON WORLDWIDE HOLDINGS ORD",
+      "weight": "0.91%"
     },
     {
       "name": "COSTCO WHOLESALE ORD",
-      "weight": "0.87%"
+      "weight": "0.88%"
     },
     {
       "name": "WELLS FARGO ORD",
-      "weight": "0.83%"
+      "weight": "0.86%"
     },
     {
       "name": "EXXON MOBIL ORD",
-      "weight": "0.77%"
-    },
-    {
-      "name": "GENERAL MOTORS ORD",
-      "weight": "0.67%"
-    },
-    {
-      "name": "INTUIT ORD",
-      "weight": "0.67%"
+      "weight": "0.74%"
     },
     {
       "name": "COGNIZANT TECHNOLOGY SOLUTN CL A ORD",
-      "weight": "0.67%"
+      "weight": "0.65%"
+    },
+    {
+      "name": "GENERAL MOTORS ORD",
+      "weight": "0.65%"
     },
     {
       "name": "BOSTON SCIENTIFIC ORD",
-      "weight": "0.66%"
+      "weight": "0.64%"
+    },
+    {
+      "name": "INTUIT ORD",
+      "weight": "0.60%"
     }
   ],
   "holdings_count": 60,
