@@ -1,31 +1,15 @@
 {
-  "updated_at": "2026-07-23T15:29:25",
-  "updated_at_display": "23/07/2026 15:29",
+  "updated_at": "2026-07-24T22:50:41",
+  "updated_at_display": "24/07/2026 22:50",
   "total_funds": 109,
-  "found": 108,
-  "not_found": 1,
+  "found": 107,
+  "not_found": 2,
   "funds": [
     {
       "fund_id": "5124532",
       "name": "תכלית TTF (4D) NASDAQ 100",
       "category": "חו\"ל חשופי מטבע",
-      "price": "394.56",
-      "daily": "1.74%",
-      "weekly": "1.29%",
-      "month_to_date": "-1.09%",
-      "month_30d": "-0.54%",
-      "months_3": "12.19%",
-      "ytd": "10.57%",
-      "months_12": "14.81%",
-      "years_3": "61.64%",
-      "years_5": "87.4%",
-      "y2025": "5.36%",
-      "y2024": "25.57%",
-      "y2023": "60.34%",
-      "y2022": "-23.94%",
-      "stdev_12m": "15",
-      "sharpe_12m": "1",
-      "status": "ok"
+      "status": "not_found"
     },
     {
       "fund_id": "5113998",
