@@ -1,13 +1,13 @@
 {
-  "updated_at": "2026-08-09T15:08:19",
-  "updated_at_display": "09/08/2026 15:08",
+  "updated_at": "2026-08-10T07:41:02",
+  "updated_at_display": "10/08/2026 07:41",
   "source": "https://www.indxx.com/index/indxx-super-institutional-investors-13-f-index",
   "index_name": "Indxx Super Institutional Investors Holdings 13F Index",
   "returns_summary": {
     "qtd": "3.08%",
     "ytd": "22.69%",
     "1y": "34.02%",
-    "3y": "28.3%",
+    "3y": "28.22%",
     "since_base": "17.9%"
   },
   "returns_table": {
@@ -46,7 +46,7 @@
           "3.08%",
           "22.69%",
           "34.02%",
-          "28.3%",
+          "28.22%",
           "17.9%"
         ]
       },
