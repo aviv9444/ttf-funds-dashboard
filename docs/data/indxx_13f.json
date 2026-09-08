@@ -1,14 +1,14 @@
 {
-  "updated_at": "2026-09-07T12:02:54",
-  "updated_at_display": "07/09/2026 12:02",
+  "updated_at": "2026-09-08T08:58:51",
+  "updated_at_display": "08/09/2026 08:58",
   "source": "https://www.indxx.com/index/indxx-super-institutional-investors-13-f-index",
   "index_name": "Indxx Super Institutional Investors Holdings 13F Index",
   "returns_summary": {
-    "qtd": "2.42%",
+    "qtd": "2.43%",
     "ytd": "21.92%",
-    "1y": "32.99%",
-    "3y": "28.13%",
-    "since_base": "17.49%"
+    "1y": "31.96%",
+    "3y": "28.05%",
+    "since_base": "17.46%"
   },
   "returns_table": {
     "headers": [
@@ -43,19 +43,19 @@
       {
         "label": "Returns²",
         "values": [
-          "2.42%",
+          "2.43%",
           "21.92%",
-          "32.99%",
-          "28.13%",
-          "17.49%"
+          "31.96%",
+          "28.05%",
+          "17.46%"
         ]
       },
       {
         "label": "Standard Deviation",
         "values": [
-          "11.36%",
-          "15.94%",
-          "14.73%",
+          "11.25%",
+          "15.9%",
+          "14.72%",
           "14.04%",
           "14.63%"
         ]
@@ -105,7 +105,7 @@
     },
     {
       "name": "META PLATFORMS CL A ORD",
-      "weight": "2.54%"
+      "weight": "2.53%"
     },
     {
       "name": "AMGEN ORD",
